@@ -1,0 +1,16 @@
+{
+  "projectName": "水电工程建设项目",
+  "indirectCostPerDay": 10000,
+  "tasks": [
+    { "id": "A", "name": "场地准备", "predecessors": [], "timeNormal": 5, "costNormal": 50000, "timeCrash": 4, "costCrash": 65000, "compressible": true },
+    { "id": "B", "name": "基础开挖", "predecessors": ["A"], "timeNormal": 10, "costNormal": 120000, "timeCrash": 8, "costCrash": 150000, "compressible": true },
+    { "id": "C", "name": "大坝浇筑", "predecessors": ["B"], "timeNormal": 25, "costNormal": 500000, "timeCrash": 20, "costCrash": 600000, "compressible": true },
+    { "id": "D", "name": "引水渠道建设", "predecessors": ["B"], "timeNormal": 18, "costNormal": 250000, "timeCrash": 18, "costCrash": 250000, "compressible": false },
+    { "id": "E", "name": "安装涡轮机", "predecessors": ["C"], "timeNormal": 15, "costNormal": 300000, "timeCrash": 12, "costCrash": 345000, "compressible": true },
+    { "id": "F", "name": "安装发电机", "predecessors": ["E"], "timeNormal": 12, "costNormal": 280000, "timeCrash": 10, "costCrash": 310000, "compressible": true },
+    { "id": "G", "name": "建设变电站", "predecessors": ["D"], "timeNormal": 20, "costNormal": 220000, "timeCrash": 20, "costCrash": 220000, "compressible": false },
+    { "id": "H", "name": "铺设输电线路", "predecessors": ["G"], "timeNormal": 15, "costNormal": 180000, "timeCrash": 12, "costCrash": 225000, "compressible": true },
+    { "id": "I", "name": "系统联调", "predecessors": ["F", "H"], "timeNormal": 10, "costNormal": 150000, "timeCrash": 7, "costCrash": 195000, "compressible": true },
+    { "id": "J", "name": "竣工验收", "predecessors": ["I"], "timeNormal": 3, "costNormal": 30000, "timeCrash": 3, "costCrash": 30000, "compressible": false }
+  ]
+}

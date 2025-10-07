@@ -1,0 +1,189 @@
+/* frontend/src/App.css */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  position:relative;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-metric label {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.dashboard-metric span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #343a40;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.task-table th, .task-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.task-table th {
+  background-color: #f8f9fa;
+}
+
+.task-table tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+.critical-task {
+  background-color: #ffebee !important; /* 红色高亮 */
+  font-weight: bold;
+}
+
+/* frontend/src/App.css (追加) */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+.login-form input {
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.login-form button {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.login-form button:disabled {
+  background-color: #6c757d;
+}
+
+.login-error {
+  color: #dc3545;
+}
+
+/* frontend/src/App.css (追加) */
+.main-view {
+  /* display: grid; */
+  /* grid-template-columns: 3fr 1fr; /* 主内容区占3份，检查器占1份 */
+  /*gap: 2rem;
+  align-items: start; */
+}
+
+.inspector-panel {
+  padding: 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #fcfdfe;
+  position: static; /* 让它在滚动时保持在原位 */
+  margin-top: 2rem;
+}
+
+.inspector-panel h3 {
+  margin-top: 0;
+}
+
+.inspector-panel p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.inspector-panel strong {
+  display: inline-block;
+  width: 100px; /* 对齐标签 */
+}
+
+.selected-task {
+  background-color: #cce5ff !important; /* 蓝色高亮 */
+}
+
+/* frontend/src/App.css (追加) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 400px;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.modal-content .track-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.modal-content .track-selection label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
