@@ -83,7 +83,7 @@ function Leaderboard() {
                       </span>
                     </td>
                     <td style={{textAlign: 'center'}}>{row.project_duration} 天</td>
-                    <td style={{textAlign: 'center'}}>¥{Math.round(row.total_cost).toLocaleString()}</td>
+                    <td style={{textAlign: 'center'}}>¥{Math.round(row.direct_cost).toLocaleString()}</td>
                     <td className="time-cell">{new Date(row.submitted_at).toLocaleString('zh-CN')}</td>
                   </tr>
                 ))

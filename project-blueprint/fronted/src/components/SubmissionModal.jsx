@@ -21,7 +21,8 @@ function SubmissionModal({ onClose }) {
       track: 'weighted',
       score: lifecycleCost, // 使用全生命周期总成本作为分数
       projectDuration: totalDuration,
-      totalCost: totalCost,
+      directCost: totalDirectCost,  // 直接成本
+      totalCost: totalCost,  // 全生命周期总成本
       details: {
         lifecycleCost: lifecycleCost,
         compressedTasks: tasks.filter(t => t.duration < t.timeNormal).map(t => t.id)

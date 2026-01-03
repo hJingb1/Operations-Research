@@ -26,12 +26,13 @@ CREATE TABLE IF NOT EXISTS Submissions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES Users(id),
     track VARCHAR(20) NOT NULL CHECK (track IN ('cost', 'time', 'weighted')),
-    score NUMERIC NOT NULL,
-    project_duration INTEGER NOT NULL,
-    total_cost NUMERIC NOT NULL,
-    details JSONB,
+    score NUMERIC NOT NULL,  -- 排名分数（等于total_cost）
+    project_duration INTEGER NOT NULL,  -- 项目总工期（天）
+    direct_cost NUMERIC NOT NULL,  -- 直接成本（所有任务成本之和）
+    total_cost NUMERIC NOT NULL,  -- 全生命周期总成本 = direct_cost + (工期 × 12000元/天)
+    details JSONB,  -- 存储额外信息（如压缩的任务ID列表）
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (user_id, track)
+    UNIQUE (user_id, track)  -- 每个用户每个赛道只保留一条最佳记录
 );
 
 -- 4. 创建索引

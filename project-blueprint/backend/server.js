@@ -108,25 +108,22 @@ app.get('/api/leaderboard', async (req, res) => {
         return res.status(400).json({ error: 'Invalid track specified. Only weighted track is supported.' });
     }
     try {
-        // 全生命周期总成本法排行榜
-        // 基准值（可根据项目调整）
-        const DAILY_INDIRECT_COST = 1000;  // 日均间接费用：1000元/天
-
+        // 全生命周期总成本排行榜
+        // 注意：total_cost 字段已经包含了间接费用（在前端提交时计算），无需重复计算
         const query = `
             SELECT
                 u.name,
                 s.project_duration,
-                s.total_cost,
-                -- 全生命周期总成本 = 直接成本(total_cost) + (工期 × 日均间接费用)
-                (s.total_cost + (s.project_duration * $1))::NUMERIC AS lifecycle_cost,
+                s.direct_cost,  -- 直接成本
+                s.total_cost AS lifecycle_cost,  -- total_cost就是全生命周期总成本
                 s.submitted_at
             FROM Submissions s
             JOIN Users u ON s.user_id = u.id
             WHERE s.track = 'weighted'
-            ORDER BY lifecycle_cost ASC
+            ORDER BY s.total_cost ASC  -- 按全生命周期总成本升序排列
             LIMIT 20;
         `;
-        const result = await pool.query(query, [DAILY_INDIRECT_COST]);
+        const result = await pool.query(query);
         res.json(result.rows);
     } catch (err) {
         console.error('Leaderboard fetch error:', err);
@@ -185,10 +182,10 @@ app.post('/api/phase1/submit', authMiddleware, async (req, res) => {
 });
 app.post('/api/submissions', authMiddleware, async (req, res) => {
     const userId = req.user.userId; // 从认证中间件中获取用户ID
-    const { track, score, projectDuration, totalCost, details } = req.body;
+    const { track, score, projectDuration, directCost, totalCost, details } = req.body;
 
     // 数据验证
-    if (!track || score == null || projectDuration == null || totalCost == null) {
+    if (!track || score == null || projectDuration == null || directCost == null || totalCost == null) {
         return res.status(400).json({ error: 'Missing required submission data.' });
     }
 
@@ -196,12 +193,13 @@ app.post('/api/submissions', authMiddleware, async (req, res) => {
         // 使用 PostgreSQL 的 "UPSERT" (Update or Insert) 功能，非常高效
         // ON CONFLICT...DO UPDATE 会在 (user_id, track) 组合已存在时执行更新
         const upsertQuery = `
-            INSERT INTO Submissions (user_id, track, score, project_duration, total_cost, details)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO Submissions (user_id, track, score, project_duration, direct_cost, total_cost, details)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             ON CONFLICT (user_id, track)
             DO UPDATE SET
                 score = EXCLUDED.score,
                 project_duration = EXCLUDED.project_duration,
+                direct_cost = EXCLUDED.direct_cost,
                 total_cost = EXCLUDED.total_cost,
                 details = EXCLUDED.details,
                 submitted_at = CURRENT_TIMESTAMP
@@ -209,8 +207,8 @@ app.post('/api/submissions', authMiddleware, async (req, res) => {
                 -- 关键：只有当新分数低于旧分数时，才执行更新
                 Submissions.score > EXCLUDED.score;
         `;
-        
-        const result = await pool.query(upsertQuery, [userId, track, score, projectDuration, totalCost, details || {}]);
+
+        const result = await pool.query(upsertQuery, [userId, track, score, projectDuration, directCost, totalCost, details || {}]);
 
         if (result.rowCount > 0) {
             // rowCount > 0 意味着记录被成功插入或更新了
