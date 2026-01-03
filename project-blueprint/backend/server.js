@@ -16,7 +16,9 @@ const JWT_SECRET = 'your-super-secret-key-for-dev'; // 生产环境中应使用�
 app.use(bodyParser.json());
 
 // --- 数据库连接池 ---
-const dbConnectionString = 'postgresql://postgres:2q257fhj@blueprint-db-postgresql.ns-3cnjew51.svc:5432';
+const dbConnectionString = process.env.DATABASE_URL ||
+  'postgresql://postgres:hjb123456@localhost:5432/operations_research';
+
 const pool = new Pool({ connectionString: dbConnectionString });
 
 // --- 认证中间件 (Authentication Middleware) ---
@@ -42,20 +44,50 @@ const authMiddleware = (req, res, next) => {
 
 // --- API 路由 ---
 
-// 1. 用户登录 API (无变化)
+// 1. 用户登录 API 
 app.post('/api/auth/login', async (req, res) => {
     const { name, studentId } = req.body;
     if (!name || !studentId) {
         return res.status(400).json({ error: 'Name and studentId are required.' });
     }
+
     try {
-        const result = await pool.query('SELECT * FROM Users WHERE name = $1 AND student_id = $2', [name, studentId]);
-        const user = result.rows[0];
+        // 1. 验证用户
+        const userResult = await pool.query(
+          'SELECT * FROM Users WHERE name = $1 AND student_id = $2',
+          [name, studentId]
+        );
+        const user = userResult.rows[0];
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials.' });
         }
-        const token = jwt.sign({ userId: user.id, name: user.name, studentId: user.student_id }, JWT_SECRET, { expiresIn: '8h' });
-        res.json({ message: 'Login successful!', token });
+
+        // 2. 查询阶段1状态
+        const phase1Result = await pool.query(
+          'SELECT is_passed FROM Phase1Results WHERE user_id = $1',
+          [user.id]
+        );
+        const phase1Passed = phase1Result.rows[0]?.is_passed || false;
+        const currentPhase = phase1Passed ? 2 : 1;
+
+        // 3. 生成JWT (包含currentPhase)
+        const token = jwt.sign(
+          {
+            userId: user.id,
+            name: user.name,
+            studentId: user.student_id,
+            currentPhase  // 关键！
+          },
+          JWT_SECRET,
+          { expiresIn: '8h' }
+        );
+
+        res.json({
+          message: 'Login successful!',
+          token,
+          currentPhase  // 返回给前端
+        });
+
     } catch (err) {
         console.error('Login error:', err);
         res.status(500).json({ error: 'Internal server error' });
@@ -84,6 +116,53 @@ app.get('/api/leaderboard', async (req, res) => {
 
 // 3. 提交分数 API (【核心】新增)
 // 我们将 authMiddleware 应用于此路由，所以它需要有效的JWT才能访问
+app.post('/api/phase1/submit', authMiddleware, async (req, res) => {
+    const userId = req.user.userId;
+    const { finalDuration, taskPlacements } = req.body;
+
+    if (!finalDuration) {
+      return res.status(400).json({ error: 'Missing finalDuration' });
+    }
+
+    try {
+      // 检查是否已通过
+      const existingResult = await pool.query(
+        'SELECT is_passed FROM Phase1Results WHERE user_id = $1',
+        [userId]
+      );
+
+      if (existingResult.rows[0]?.is_passed) {
+        return res.status(400).json({
+          error: 'You have already passed Phase 1'
+        });
+      }
+
+      // 插入或更新成绩
+      const upsertQuery = `
+        INSERT INTO Phase1Results (user_id, is_passed, score, final_duration, submit_attempts, passed_at)
+        VALUES ($1, TRUE, 60, $2, COALESCE((SELECT submit_attempts FROM Phase1Results WHERE user_id = $1), 0) + 1, CURRENT_TIMESTAMP)
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+          is_passed = TRUE,
+          score = 60,
+          final_duration = EXCLUDED.final_duration,
+          submit_attempts = Phase1Results.submit_attempts + 1,
+          passed_at = CURRENT_TIMESTAMP;
+      `;
+
+      await pool.query(upsertQuery, [userId, finalDuration]);
+
+      res.json({
+        success: true,
+        score: 60,
+        message: '✓ 阶段1通过！'
+      });
+
+    } catch (err) {
+      console.error('Phase1 submission error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+});
 app.post('/api/submissions', authMiddleware, async (req, res) => {
     const userId = req.user.userId; // 从认证中间件中获取用户ID
     const { track, score, projectDuration, totalCost, details } = req.body;
@@ -129,5 +208,19 @@ app.post('/api/submissions', authMiddleware, async (req, res) => {
 // --- 启动服务器 ---
 server.listen(PORT, '0.0.0.0', async () => {
   console.log(`Server running at http://0.0.0.0:${PORT}/`);
-  // ... (数据库连接检查部分无变化)
+
+  // 测试数据库连接
+  try {
+    const result = await pool.query('SELECT NOW()');
+    console.log('✅ 数据库连接成功！当前时间:', result.rows[0].now);
+
+    const userCount = await pool.query('SELECT COUNT(*) FROM Users');
+    console.log(`📊 当前用户数: ${userCount.rows[0].count}`);
+  } catch (err) {
+    console.error('❌ 数据库连接失败:', err.message);
+    console.error('请检查:');
+    console.error('1. PostgreSQL服务是否启动');
+    console.error('2. 数据库连接字符串是否正确');
+    console.error('3. 数据库和表是否已创建');
+  }
 });

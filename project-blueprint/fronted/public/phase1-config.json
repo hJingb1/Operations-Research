@@ -1,0 +1,26 @@
+{
+  "projectStartDate": "2025-01-01",
+  "maxDuration": 120,
+  "passScore": 60,
+  "validationMessages": {
+    "pass": "✓ 阶段1通过！您已掌握基础排程技能，可以进入成本优化阶段。",
+    "failDuration": "工期超限：当前{current}天，要求≤{max}天",
+    "failDependencies": "存在{count}个前置依赖违规",
+    "failResources": "存在{count}个资源冲突时段",
+    "failNotAllPlaced": "还有{count}个任务未放置"
+  },
+  "hints": {
+    "totalTasksCount": 15,
+    "criticalPathApprox": "A → B → D → E → F → G → H → I/J → L → O",
+    "parallelOpportunities": [
+      "管道铺设(C)可与地基开挖(B)并行",
+      "电梯安装(K)可与主体施工并行",
+      "外墙砌筑(I)、屋顶防水(J)可并行",
+      "内装修(L)、水电(M)、外装饰(N)可部分并行"
+    ],
+    "resourceBottlenecks": [
+      "起重机(crane)仅3台，需合理安排",
+      "主体施工阶段工人需求高，注意分散"
+    ]
+  }
+}

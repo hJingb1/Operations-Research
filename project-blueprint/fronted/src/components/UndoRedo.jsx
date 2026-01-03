@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import { setProjectData } from '../store/projectSlice';
-import initialData from '../../public/initial-project.json'; // 重新加载初始数据需要
+import initialData from '../../public/phase2-project.json'; // 重新加载初始数据需要
 
 function UndoRedo() {
   const dispatch = useDispatch();

@@ -1,0 +1,161 @@
+{
+  "projectName": "办公楼建设项目",
+  "description": "阶段1: 手动排程训练 - 学习前置依赖关系与资源管理",
+  "resourcePool": {
+    "worker": 80,
+    "crane": 3,
+    "excavator": 4,
+    "concrete_mixer": 2
+  },
+  "tasks": [
+    {
+      "id": "A",
+      "name": "场地勘测",
+      "duration": 3,
+      "predecessors": [],
+      "resources": {
+        "worker": 5
+      }
+    },
+    {
+      "id": "B",
+      "name": "地基开挖",
+      "duration": 8,
+      "predecessors": ["A"],
+      "resources": {
+        "worker": 25,
+        "excavator": 3
+      }
+    },
+    {
+      "id": "C",
+      "name": "地下管道铺设",
+      "duration": 6,
+      "predecessors": ["A"],
+      "resources": {
+        "worker": 15,
+        "excavator": 1
+      }
+    },
+    {
+      "id": "D",
+      "name": "基础浇筑",
+      "duration": 10,
+      "predecessors": ["B"],
+      "resources": {
+        "worker": 30,
+        "concrete_mixer": 2,
+        "crane": 1
+      }
+    },
+    {
+      "id": "E",
+      "name": "地下室施工",
+      "duration": 12,
+      "predecessors": ["D"],
+      "resources": {
+        "worker": 35,
+        "crane": 2
+      }
+    },
+    {
+      "id": "F",
+      "name": "主体框架1-3层",
+      "duration": 15,
+      "predecessors": ["E"],
+      "resources": {
+        "worker": 40,
+        "crane": 2,
+        "concrete_mixer": 1
+      }
+    },
+    {
+      "id": "G",
+      "name": "主体框架4-6层",
+      "duration": 15,
+      "predecessors": ["F"],
+      "resources": {
+        "worker": 40,
+        "crane": 2,
+        "concrete_mixer": 1
+      }
+    },
+    {
+      "id": "H",
+      "name": "主体框架7-9层",
+      "duration": 15,
+      "predecessors": ["G"],
+      "resources": {
+        "worker": 35,
+        "crane": 2
+      }
+    },
+    {
+      "id": "I",
+      "name": "外墙砌筑",
+      "duration": 10,
+      "predecessors": ["H"],
+      "resources": {
+        "worker": 25,
+        "crane": 1
+      }
+    },
+    {
+      "id": "J",
+      "name": "屋顶防水",
+      "duration": 5,
+      "predecessors": ["H"],
+      "resources": {
+        "worker": 15,
+        "crane": 1
+      }
+    },
+    {
+      "id": "K",
+      "name": "电梯安装",
+      "duration": 8,
+      "predecessors": ["E"],
+      "resources": {
+        "worker": 10,
+        "crane": 1
+      }
+    },
+    {
+      "id": "L",
+      "name": "内部装修",
+      "duration": 20,
+      "predecessors": ["I", "J"],
+      "resources": {
+        "worker": 50
+      }
+    },
+    {
+      "id": "M",
+      "name": "水电安装",
+      "duration": 12,
+      "predecessors": ["C", "I"],
+      "resources": {
+        "worker": 20
+      }
+    },
+    {
+      "id": "N",
+      "name": "外立面装饰",
+      "duration": 8,
+      "predecessors": ["I"],
+      "resources": {
+        "worker": 20,
+        "crane": 1
+      }
+    },
+    {
+      "id": "O",
+      "name": "竣工验收",
+      "duration": 3,
+      "predecessors": ["L", "M", "N", "K"],
+      "resources": {
+        "worker": 10
+      }
+    }
+  ]
+}
