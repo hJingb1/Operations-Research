@@ -1,0 +1,303 @@
+{
+  "project_name": "【排程挑战】龙吟峡大坝 - 三线资源死锁",
+  "global_constraints": {
+    "indirect_cost_per_day": 0,
+    "resources": {
+      "worker": 5
+    }
+  },
+  "tasks": [
+    {
+      "id": "T01",
+      "name": "进场道路与风水电布置",
+      "predecessors": [],
+      "time_normal": 5,
+      "cost_normal": 0,
+      "time_crash": 3,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "初始资源占用"
+    },
+    
+    {
+      "id": "T02",
+      "name": "A线-大坝基坑精细开挖",
+      "predecessors": ["T01"],
+      "time_normal": 10,
+      "cost_normal": 0,
+      "time_crash": 7,
+      "cost_crash": 0,
+      "resources": { "worker": 3 },
+      "compressible": true,
+      "description": "占用大部分机械，此时其他线只能做轻量活"
+    },
+    {
+      "id": "T03",
+      "name": "A线-基础固结灌浆",
+      "predecessors": ["T02"],
+      "time_normal": 6,
+      "cost_normal": 0,
+      "time_crash": 4,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true
+    },
+
+    {
+      "id": "T04",
+      "name": "B线-厂房地基开挖",
+      "predecessors": ["T01"],
+      "time_normal": 8,
+      "cost_normal": 0,
+      "time_crash": 5,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "【冲突预警】若与T02并行，资源需求3+2=5满负荷"
+    },
+    
+    {
+      "id": "T05",
+      "name": "C线-导流洞与围堰",
+      "predecessors": ["T01"],
+      "time_normal": 12,
+      "cost_normal": 0,
+      "time_crash": 8,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "第三条线，稍不注意就会被T02和T04挤到延期"
+    },
+
+    {
+      "id": "T06_L",
+      "name": "A线-大坝底层浇筑(左岸)",
+      "predecessors": ["T03"],
+      "time_normal": 12,
+      "cost_normal": 0,
+      "time_crash": 9,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "【死锁核心】必须与右岸并行，否则受力不均"
+    },
+    {
+      "id": "T06_R",
+      "name": "A线-大坝底层浇筑(右岸)",
+      "predecessors": ["T03"],
+      "time_normal": 12,
+      "cost_normal": 0,
+      "time_crash": 9,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "【死锁核心】左右岸共需4台机械"
+    },
+
+    {
+      "id": "T07",
+      "name": "B线-厂房尾水管安装",
+      "predecessors": ["T04"],
+      "time_normal": 5,
+      "cost_normal": 0,
+      "time_crash": 3,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true
+    },
+    {
+      "id": "T08",
+      "name": "B线-厂房下部结构浇筑",
+      "predecessors": ["T07"],
+      "time_normal": 10,
+      "cost_normal": 0,
+      "time_crash": 7,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "【冲突爆发】此时若大坝左右岸(2+2)在施工，再加此任务(2)，总需6台，必须推迟某项"
+    },
+
+    {
+      "id": "T09",
+      "name": "C线-压力钢管制作",
+      "predecessors": ["T05"],
+      "time_normal": 15,
+      "cost_normal": 0,
+      "time_crash": 10,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true,
+      "description": "长周期任务，需持续占用1台机械"
+    },
+
+    {
+      "id": "T10",
+      "name": "A线-大坝廊道与灌浆平洞",
+      "predecessors": ["T06_L", "T06_R"],
+      "time_normal": 6,
+      "cost_normal": 0,
+      "time_crash": 4,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true,
+      "description": "左右岸合龙后的细部结构"
+    },
+    {
+      "id": "T11",
+      "name": "A线-大坝中层大体积浇筑",
+      "predecessors": ["T10"],
+      "time_normal": 15,
+      "cost_normal": 0,
+      "time_crash": 10,
+      "cost_crash": 0,
+      "resources": { "worker": 3 },
+      "compressible": true,
+      "description": "独占3台机械，挤占其他线路空间"
+    },
+    
+    {
+      "id": "T12",
+      "name": "C线-压力钢管穿坝安装",
+      "predecessors": ["T09", "T10"],
+      "time_normal": 8,
+      "cost_normal": 0,
+      "time_crash": 5,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "连接A线与C线的关键节点"
+    },
+
+    {
+      "id": "T13",
+      "name": "B线-水轮机蜗壳安装",
+      "predecessors": ["T08"],
+      "time_normal": 8,
+      "cost_normal": 0,
+      "time_crash": 5,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true
+    },
+    {
+      "id": "T14",
+      "name": "B线-厂房上部框架封顶",
+      "predecessors": ["T13"],
+      "time_normal": 10,
+      "cost_normal": 0,
+      "time_crash": 7,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true
+    },
+
+    {
+      "id": "T15",
+      "name": "A线-溢流面与闸墩施工",
+      "predecessors": ["T11"],
+      "time_normal": 10,
+      "cost_normal": 0,
+      "time_crash": 7,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true
+    },
+    {
+      "id": "T16",
+      "name": "A线-大坝顶层浇筑与封顶",
+      "predecessors": ["T15"],
+      "time_normal": 8,
+      "cost_normal": 0,
+      "time_crash": 5,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true
+    },
+
+    {
+      "id": "T17",
+      "name": "C线-进水口拦污栅安装",
+      "predecessors": ["T16"],
+      "time_normal": 5,
+      "cost_normal": 0,
+      "time_crash": 3,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true
+    },
+
+    {
+      "id": "T18",
+      "name": "B线-机组转子吊装",
+      "predecessors": ["T14"],
+      "time_normal": 5,
+      "cost_normal": 0,
+      "time_crash": 3,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true
+    },
+    {
+      "id": "T19",
+      "name": "B线-发电机总装",
+      "predecessors": ["T18"],
+      "time_normal": 8,
+      "cost_normal": 0,
+      "time_crash": 6,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true
+    },
+
+    {
+      "id": "T20",
+      "name": "G线-下闸蓄水",
+      "predecessors": ["T16", "T12"],
+      "time_normal": 2,
+      "cost_normal": 0,
+      "time_crash": 1,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": true,
+      "description": "必须大坝封顶且钢管装完"
+    },
+    {
+      "id": "T21",
+      "name": "G线-水库充水",
+      "predecessors": ["T20"],
+      "time_normal": 10,
+      "cost_normal": 0,
+      "time_crash": 10,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": false,
+      "description": "自然过程，但也需1单位资源用于监测"
+    },
+
+    {
+      "id": "T22",
+      "name": "H线-有水联调",
+      "predecessors": ["T19", "T21", "T17"],
+      "time_normal": 5,
+      "cost_normal": 0,
+      "time_crash": 3,
+      "cost_crash": 0,
+      "resources": { "worker": 2 },
+      "compressible": true,
+      "description": "汇聚A、B、C三线的最终节点"
+    },
+    {
+      "id": "T23",
+      "name": "H线-并网发电移交",
+      "predecessors": ["T22"],
+      "time_normal": 2,
+      "cost_normal": 0,
+      "time_crash": 2,
+      "cost_crash": 0,
+      "resources": { "worker": 1 },
+      "compressible": false
+    }
+  ]
+}

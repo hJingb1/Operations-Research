@@ -27,13 +27,16 @@ const phase1Slice = createSlice({
       state.resourcePool = projectData.resourcePool;
       state.config = config;
 
-      // 初始化任务：全部放在Day 0，标记为未放置
-      state.tasks = projectData.tasks.map(t => ({
+      // 初始化任务：任务A固定在Day 1已放置，其余任务放在Day 0未放置
+      state.tasks = projectData.tasks.map((t, index) => ({
         ...t,
-        startDay: 0,
-        isPlaced: false
+        startDay: index === 0 ? 1 : 0, // 第一个任务(A)从Day 1开始
+        isPlaced: index === 0 ? true : false, // 第一个任务已放置
+        isLocked: index === 0 ? true : false // 第一个任务锁定不可移动
       }));
-      state.unplacedTaskIds = projectData.tasks.map(t => t.id);
+      state.unplacedTaskIds = projectData.tasks
+        .slice(1) // 排除第一个任务
+        .map(t => t.id);
     },
 
     placeTask: (state, action) => {
@@ -49,7 +52,8 @@ const phase1Slice = createSlice({
     moveTask: (state, action) => {
       const { taskId, newStartDay } = action.payload;
       const task = state.tasks.find(t => t.id === taskId);
-      if (task) {
+      // 只允许移动未锁定的任务
+      if (task && !task.isLocked) {
         task.startDay = newStartDay;
       }
     },

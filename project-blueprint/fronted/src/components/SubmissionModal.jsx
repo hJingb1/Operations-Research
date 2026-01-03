@@ -4,25 +4,26 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 function SubmissionModal({ onClose }) {
-  const [selectedTrack, setSelectedTrack] = useState('cost'); // 默认选中 'cost'
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ message: '', error: false });
 
-  const { totalCost, totalDuration, tasks } = useSelector((state) => state.project.present);
+  const { totalCost, totalDuration, totalDirectCost, tasks } = useSelector((state) => state.project.present);
   const token = useSelector((state) => state.auth.token);
-  
+
+  // totalCost 已经包含了间接费用（在 Redux Store 中使用 12,000元/天 计算）
+  const lifecycleCost = totalCost;
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setSubmitStatus({ message: '', error: false });
 
-    const score = selectedTrack === 'cost' ? totalCost : totalDuration;
     const submissionData = {
-      track: selectedTrack,
-      score: score,
+      track: 'weighted',
+      score: lifecycleCost, // 使用全生命周期总成本作为分数
       projectDuration: totalDuration,
       totalCost: totalCost,
       details: {
-        // 这里可以添加更多想保存的细节
+        lifecycleCost: lifecycleCost,
         compressedTasks: tasks.filter(t => t.duration < t.timeNormal).map(t => t.id)
       }
     };
@@ -46,19 +47,32 @@ function SubmissionModal({ onClose }) {
     <div className="modal-overlay">
       <div className="modal-content">
         <h3>提交你的优化方案</h3>
-        <p>请选择一个赛道进行提交。系统将只保留你在该赛道上的历史最佳成绩。</p>
-        <div className="track-selection">
-          <label>
-            <input type="radio" value="cost" checked={selectedTrack === 'cost'} onChange={() => setSelectedTrack('cost')} />
-            总成本最低 (当前: ¥{Math.round(totalCost).toLocaleString()})
-          </label>
-          <label>
-            <input type="radio" value="time" checked={selectedTrack === 'time'} onChange={() => setSelectedTrack('time')} />
-            总工期最短 (当前: {totalDuration} 天)
-          </label>
+        <p>系统将根据全生命周期总成本进行排名，只保留你的历史最佳成绩。</p>
+
+        <div style={{
+          marginTop: '1rem',
+          marginBottom: '1rem',
+          padding: '1rem',
+          background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%)',
+          borderRadius: '8px',
+          border: '2px solid #2196f3'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <span style={{ fontWeight: '600', color: '#1976d2' }}>工期：</span>
+            <span style={{ fontSize: '1.1em', fontWeight: 'bold' }}>{totalDuration} 天</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <span style={{ fontWeight: '600', color: '#1976d2' }}>直接成本：</span>
+            <span style={{ fontSize: '1.1em', fontWeight: 'bold' }}>¥{Math.round(totalDirectCost).toLocaleString()}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.75rem', borderTop: '2px solid #2196f3' }}>
+            <span style={{ fontWeight: '600', color: '#1565c0', fontSize: '1.1em' }}>全生命周期总成本：</span>
+            <span style={{ fontSize: '1.3em', fontWeight: 'bold', color: '#1565c0' }}>¥{Math.round(lifecycleCost).toLocaleString()}</span>
+          </div>
         </div>
+
         {submitStatus.message && (
-          <p style={{ color: submitStatus.error ? 'red' : 'green' }}>
+          <p style={{ color: submitStatus.error ? 'red' : 'green', marginTop: '1rem' }}>
             {submitStatus.message}
           </p>
         )}

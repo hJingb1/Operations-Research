@@ -1,6 +1,7 @@
 {
   "projectStartDate": "2025-01-01",
-  "maxDuration": 120,
+  "projectEndDate": "2025-07-01",
+  "maxDuration": 100,
   "passScore": 60,
   "validationMessages": {
     "pass": "✓ 阶段1通过！您已掌握基础排程技能，可以进入成本优化阶段。",

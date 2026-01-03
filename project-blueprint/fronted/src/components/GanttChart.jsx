@@ -51,7 +51,7 @@ function GanttChart() {
 
   return (
     <div>
-      <h2>项目甘特图</h2>
+      <h2 className="gantt-title">项目甘特图</h2>
       {tasks.length > 0 ? (
         <GanttWrapper data={ganttData} onTaskClick={handleTaskClick} />
       ) : (

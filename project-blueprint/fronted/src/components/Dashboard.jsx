@@ -1,29 +1,53 @@
 // frontend/src/components/Dashboard.jsx
-import React, {useState} from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice';
 import SubmissionModal from './SubmissionModal';
 import UndoRedo from './UndoRedo';
 
 function Dashboard() {
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { 
-    projectName, 
+  const {
     totalDuration,
     totalDirectCost,
     totalIndirectCost,
-    totalCost 
+    totalCost
   } = useSelector((state) => state.project.present);
+
+  const handleLogout = () => {
+    if (window.confirm('确定要退出登录吗？')) {
+      dispatch(logout());
+      window.location.reload();
+    }
+  };
 
   return (
     <div>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems:'center',marginBottom:'1rem'}}>
-            <h1>{projectName}</h1>
-            <div style ={{display:'flex' , gap:'1rem'}}>
-            <UndoRedo />
-            <button onClick={() => setIsModalOpen(true)}>提交方案</button>
+        <div className="phase2-header">
+          <div className="phase2-title-section">
+            <div className="phase2-logo-icon">运</div>
+            <div className="phase2-title-group">
+              <h1 className="phase2-title">运筹学课程设计项目</h1>
+              <span className="phase2-subtitle">Operations Research Course Design</span>
             </div>
+          </div>
+          <div className="phase2-actions">
+            <UndoRedo />
+            <button onClick={() => setIsModalOpen(true)} className="btn-submit-solution">
+              <span className="btn-icon">📤</span>
+              提交方案
+            </button>
+            <button
+              onClick={handleLogout}
+              className="btn-logout-phase2"
+            >
+              <span className="btn-icon">⎋</span>
+              退出登录
+            </button>
+          </div>
         </div>
-      
+
       <div className="dashboard">
         <div className="dashboard-metric">
           <label>总工期 (天)</label>

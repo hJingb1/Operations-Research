@@ -1,16 +1,336 @@
 {
-  "projectName": "水电工程建设项目",
-  "indirectCostPerDay": 10000,
+  "projectName": "【阶段2】云台山抽蓄电站 - 成本优化博弈",
+  "indirectCostPerDay": 12000,
   "tasks": [
-    { "id": "A", "name": "场地准备", "predecessors": [], "timeNormal": 5, "costNormal": 50000, "timeCrash": 4, "costCrash": 65000, "compressible": true },
-    { "id": "B", "name": "基础开挖", "predecessors": ["A"], "timeNormal": 10, "costNormal": 120000, "timeCrash": 8, "costCrash": 150000, "compressible": true },
-    { "id": "C", "name": "大坝浇筑", "predecessors": ["B"], "timeNormal": 25, "costNormal": 500000, "timeCrash": 20, "costCrash": 600000, "compressible": true },
-    { "id": "D", "name": "引水渠道建设", "predecessors": ["B"], "timeNormal": 18, "costNormal": 250000, "timeCrash": 18, "costCrash": 250000, "compressible": false },
-    { "id": "E", "name": "安装涡轮机", "predecessors": ["C"], "timeNormal": 15, "costNormal": 300000, "timeCrash": 12, "costCrash": 345000, "compressible": true },
-    { "id": "F", "name": "安装发电机", "predecessors": ["E"], "timeNormal": 12, "costNormal": 280000, "timeCrash": 10, "costCrash": 310000, "compressible": true },
-    { "id": "G", "name": "建设变电站", "predecessors": ["D"], "timeNormal": 20, "costNormal": 220000, "timeCrash": 20, "costCrash": 220000, "compressible": false },
-    { "id": "H", "name": "铺设输电线路", "predecessors": ["G"], "timeNormal": 15, "costNormal": 180000, "timeCrash": 12, "costCrash": 225000, "compressible": true },
-    { "id": "I", "name": "系统联调", "predecessors": ["F", "H"], "timeNormal": 10, "costNormal": 150000, "timeCrash": 7, "costCrash": 195000, "compressible": true },
-    { "id": "J", "name": "竣工验收", "predecessors": ["I"], "timeNormal": 3, "costNormal": 30000, "timeCrash": 3, "costCrash": 30000, "compressible": false }
+    {
+      "id": "T01",
+      "name": "进场交通洞与通风洞开挖",
+      "predecessors": [],
+      "timeNormal": 8,
+      "costNormal": 20000,
+      "timeCrash": 5,
+      "costCrash": 29000,
+      "compressible": true
+    },
+    {
+      "id": "A01",
+      "name": "A线-上水库库盆剥离",
+      "predecessors": ["T01"],
+      "timeNormal": 10,
+      "costNormal": 30000,
+      "timeCrash": 6,
+      "costCrash": 38000,
+      "compressible": true
+    },
+    {
+      "id": "A02",
+      "name": "A线-上库主坝填筑",
+      "predecessors": ["A01"],
+      "timeNormal": 15,
+      "costNormal": 60000,
+      "timeCrash": 10,
+      "costCrash": 80000,
+      "compressible": true
+    },
+    {
+      "id": "A03",
+      "name": "A线-库盆防渗面板浇筑",
+      "predecessors": ["A02"],
+      "timeNormal": 12,
+      "costNormal": 48000,
+      "timeCrash": 9,
+      "costCrash": 63000,
+      "compressible": true
+    },
+    {
+      "id": "A04",
+      "name": "A线-进出水口闸门井施工",
+      "predecessors": ["A03"],
+      "timeNormal": 8,
+      "costNormal": 32000,
+      "timeCrash": 6,
+      "costCrash": 44000,
+      "compressible": true
+    },
+    {
+      "id": "B01",
+      "name": "B线-主副厂房顶拱开挖",
+      "predecessors": ["T01"],
+      "timeNormal": 12,
+      "costNormal": 50000,
+      "timeCrash": 9,
+      "costCrash": 74000,
+      "compressible": true
+    },
+    {
+      "id": "B02",
+      "name": "B线-岩锚梁浇筑与锚固",
+      "predecessors": ["B01"],
+      "timeNormal": 6,
+      "costNormal": 24000,
+      "timeCrash": 4,
+      "costCrash": 36000,
+      "compressible": true
+    },
+    {
+      "id": "B03",
+      "name": "B线-厂房高边墙向下开挖",
+      "predecessors": ["B02"],
+      "timeNormal": 14,
+      "costNormal": 70000,
+      "timeCrash": 10,
+      "costCrash": 110000,
+      "compressible": true
+    },
+    {
+      "id": "B04",
+      "name": "B线-引水斜井扩挖",
+      "predecessors": ["B01"],
+      "timeNormal": 10,
+      "costNormal": 40000,
+      "timeCrash": 7,
+      "costCrash": 61000,
+      "compressible": true
+    },
+    {
+      "id": "B05",
+      "name": "B线-高压钢管安装与回填",
+      "predecessors": ["B04", "B03"],
+      "timeNormal": 8,
+      "costNormal": 32000,
+      "timeCrash": 6,
+      "costCrash": 48000,
+      "compressible": true
+    },
+    {
+      "id": "B06",
+      "name": "B线-机墩与蜗壳混凝土浇筑",
+      "predecessors": ["B05"],
+      "timeNormal": 10,
+      "costNormal": 40000,
+      "timeCrash": 8,
+      "costCrash": 52000,
+      "compressible": true
+    },
+    {
+      "id": "C01",
+      "name": "C线-下水库导流",
+      "predecessors": ["T01"],
+      "timeNormal": 5,
+      "costNormal": 10000,
+      "timeCrash": 3,
+      "costCrash": 12000,
+      "compressible": true
+    },
+    {
+      "id": "C02",
+      "name": "C线-下库坝基开挖",
+      "predecessors": ["C01"],
+      "timeNormal": 8,
+      "costNormal": 24000,
+      "timeCrash": 5,
+      "costCrash": 30000,
+      "compressible": true
+    },
+    {
+      "id": "C03",
+      "name": "C线-RCC碾压混凝土坝浇筑",
+      "predecessors": ["C02"],
+      "timeNormal": 15,
+      "costNormal": 45000,
+      "timeCrash": 10,
+      "costCrash": 60000,
+      "compressible": true
+    },
+    {
+      "id": "C04",
+      "name": "C线-溢洪道土建施工",
+      "predecessors": ["C03"],
+      "timeNormal": 6,
+      "costNormal": 18000,
+      "timeCrash": 4,
+      "costCrash": 24000,
+      "compressible": true
+    },
+    {
+      "id": "C05",
+      "name": "C线-尾水出口闸门安装",
+      "predecessors": ["C04"],
+      "timeNormal": 4,
+      "costNormal": 12000,
+      "timeCrash": 2,
+      "costCrash": 18000,
+      "compressible": true
+    },
+    {
+      "id": "D01",
+      "name": "M线-桥机安装",
+      "predecessors": ["B02"],
+      "timeNormal": 4,
+      "costNormal": 16000,
+      "timeCrash": 2,
+      "costCrash": 24000,
+      "compressible": true
+    },
+    {
+      "id": "D02",
+      "name": "M线-水轮机座环吊装",
+      "predecessors": ["D01", "B03"],
+      "timeNormal": 3,
+      "costNormal": 12000,
+      "timeCrash": 2,
+      "costCrash": 20000,
+      "compressible": true
+    },
+    {
+      "id": "D03",
+      "name": "M线-定子组装与焊接",
+      "predecessors": ["D01"],
+      "timeNormal": 12,
+      "costNormal": 36000,
+      "timeCrash": 8,
+      "costCrash": 60000,
+      "compressible": true
+    },
+    {
+      "id": "D04",
+      "name": "M线-定子吊装就位",
+      "predecessors": ["D03", "B06"],
+      "timeNormal": 2,
+      "costNormal": 8000,
+      "timeCrash": 1,
+      "costCrash": 20000,
+      "compressible": true
+    },
+    {
+      "id": "D05",
+      "name": "M线-转子组装(含磁极挂装)",
+      "predecessors": ["D01"],
+      "timeNormal": 14,
+      "costNormal": 42000,
+      "timeCrash": 10,
+      "costCrash": 70000,
+      "compressible": true
+    },
+    {
+      "id": "D06",
+      "name": "M线-转子吊装",
+      "predecessors": ["D05", "D04"],
+      "timeNormal": 3,
+      "costNormal": 15000,
+      "timeCrash": 2,
+      "costCrash": 35000,
+      "compressible": true
+    },
+    {
+      "id": "D07",
+      "name": "M线-主变压器安装",
+      "predecessors": ["B01"],
+      "timeNormal": 8,
+      "costNormal": 24000,
+      "timeCrash": 6,
+      "costCrash": 34000,
+      "compressible": true
+    },
+    {
+      "id": "D08",
+      "name": "M线-GIS开关站设备安装",
+      "predecessors": ["D07"],
+      "timeNormal": 10,
+      "costNormal": 40000,
+      "timeCrash": 7,
+      "costCrash": 61000,
+      "compressible": true
+    },
+    {
+      "id": "E01",
+      "name": "X线-地面开关站土建",
+      "predecessors": ["T01"],
+      "timeNormal": 12,
+      "costNormal": 24000,
+      "timeCrash": 8,
+      "costCrash": 36000,
+      "compressible": true
+    },
+    {
+      "id": "E02",
+      "name": "X线-出线场架构安装",
+      "predecessors": ["E01"],
+      "timeNormal": 6,
+      "costNormal": 12000,
+      "timeCrash": 4,
+      "costCrash": 18000,
+      "compressible": true
+    },
+    {
+      "id": "E03",
+      "name": "X线-高压电缆敷设",
+      "predecessors": ["E02", "D08"],
+      "timeNormal": 5,
+      "costNormal": 15000,
+      "timeCrash": 3,
+      "costCrash": 25000,
+      "compressible": true
+    },
+    {
+      "id": "F01",
+      "name": "Z线-上水库蓄水",
+      "predecessors": ["A04", "B05"],
+      "timeNormal": 10,
+      "costNormal": 5000,
+      "timeCrash": 10,
+      "costCrash": 5000,
+      "compressible": false
+    },
+    {
+      "id": "F02",
+      "name": "Z线-下水库蓄水",
+      "predecessors": ["C05"],
+      "timeNormal": 10,
+      "costNormal": 5000,
+      "timeCrash": 10,
+      "costCrash": 5000,
+      "compressible": false
+    },
+    {
+      "id": "F03",
+      "name": "Z线-输水系统充水试验",
+      "predecessors": ["F01", "F02", "D06"],
+      "timeNormal": 3,
+      "costNormal": 6000,
+      "timeCrash": 2,
+      "costCrash": 15000,
+      "compressible": true
+    },
+    {
+      "id": "F04",
+      "name": "Z线-机组过速试验",
+      "predecessors": ["F03"],
+      "timeNormal": 2,
+      "costNormal": 4000,
+      "timeCrash": 1,
+      "costCrash": 10000,
+      "compressible": true
+    },
+    {
+      "id": "F05",
+      "name": "Z线-并网调试",
+      "predecessors": ["F04", "E03"],
+      "timeNormal": 4,
+      "costNormal": 12000,
+      "timeCrash": 2,
+      "costCrash": 30000,
+      "compressible": true
+    },
+    {
+      "id": "F06",
+      "name": "Z线-15天试运行考核",
+      "predecessors": ["F05"],
+      "timeNormal": 15,
+      "costNormal": 5000,
+      "timeCrash": 15,
+      "costCrash": 5000,
+      "compressible": false
+    }
   ]
 }

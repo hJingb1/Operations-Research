@@ -17,14 +17,15 @@ export default class GanttWrapper extends Component {
     gantt.config.scale_unit = 'day';
     gantt.config.step = 1;
     gantt.config.date_scale = '%M %d';
+    gantt.config.column_width = 30; 
 
     gantt.init(this.ganttContainer.current);
-    
+
     this.onTaskClickHandler = gantt.attachEvent('onTaskClick', (id) => {
       this.props.onTaskClick?.(id);
       return true;
     });
-    
+
     if (this.props.data) {
       gantt.parse(this.props.data);
     }
@@ -49,7 +50,7 @@ export default class GanttWrapper extends Component {
     return (
       <div
         ref={this.ganttContainer}
-        style={{ width: '100%', height: '500px' }}
+        style={{ width: '100%', height: '800px' }}
       ></div>
     );
   }

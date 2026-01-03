@@ -1,0 +1,306 @@
+{
+  "projectName": "龙吟峡水电站枢纽工程",
+  "indirectCostPerDay": 15000,
+  "tasks": [
+    {
+      "id": "T01",
+      "name": "进场道路与三通一平",
+      "predecessors": [],
+      "timeNormal": 5,
+      "costNormal": 10000,
+      "timeCrash": 3,
+      "costCrash": 14000,
+      "compressible": true
+    },
+    {
+      "id": "T02",
+      "name": "导流隧洞开挖与支护",
+      "predecessors": ["T01"],
+      "timeNormal": 12,
+      "costNormal": 60000,
+      "timeCrash": 8,
+      "costCrash": 80000,
+      "compressible": true
+    },
+    {
+      "id": "T03",
+      "name": "上下游围堰填筑",
+      "predecessors": ["T02"],
+      "timeNormal": 6,
+      "costNormal": 24000,
+      "timeCrash": 4,
+      "costCrash": 30000,
+      "compressible": true
+    },
+    {
+      "id": "T04",
+      "name": "基坑抽水与清淤",
+      "predecessors": ["T03"],
+      "timeNormal": 3,
+      "costNormal": 5000,
+      "timeCrash": 2,
+      "costCrash": 7000,
+      "compressible": true
+    },
+    {
+      "id": "T05",
+      "name": "坝基土石方开挖",
+      "predecessors": ["T04"],
+      "timeNormal": 10,
+      "costNormal": 50000,
+      "timeCrash": 7,
+      "costCrash": 68000,
+      "compressible": true
+    },
+    {
+      "id": "T06",
+      "name": "基础固结灌浆处理",
+      "predecessors": ["T05"],
+      "timeNormal": 8,
+      "costNormal": 32000,
+      "timeCrash": 5,
+      "costCrash": 44000,
+      "compressible": true
+    },
+    {
+      "id": "T07",
+      "name": "大坝底层混凝土浇筑",
+      "predecessors": ["T06"],
+      "timeNormal": 12,
+      "costNormal": 72000,
+      "timeCrash": 9,
+      "costCrash": 90000,
+      "compressible": true
+    },
+    {
+      "id": "T08",
+      "name": "坝体内廊道与排水孔",
+      "predecessors": ["T07"],
+      "timeNormal": 5,
+      "costNormal": 15000,
+      "timeCrash": 3,
+      "costCrash": 21000,
+      "compressible": true
+    },
+    {
+      "id": "T09",
+      "name": "大坝中层混凝土浇筑",
+      "predecessors": ["T07"],
+      "timeNormal": 10,
+      "costNormal": 60000,
+      "timeCrash": 7,
+      "costCrash": 78000,
+      "compressible": true
+    },
+    {
+      "id": "T10",
+      "name": "溢流面曲线修整",
+      "predecessors": ["T09"],
+      "timeNormal": 6,
+      "costNormal": 18000,
+      "timeCrash": 4,
+      "costCrash": 24000,
+      "compressible": true
+    },
+    {
+      "id": "T11",
+      "name": "大坝顶层浇筑与封顶",
+      "predecessors": ["T09"],
+      "timeNormal": 8,
+      "costNormal": 48000,
+      "timeCrash": 6,
+      "costCrash": 58000,
+      "compressible": true
+    },
+    {
+      "id": "T12",
+      "name": "坝顶门机轨道安装",
+      "predecessors": ["T11"],
+      "timeNormal": 4,
+      "costNormal": 12000,
+      "timeCrash": 2,
+      "costCrash": 16000,
+      "compressible": true
+    },
+    {
+      "id": "T13",
+      "name": "厂房地基开挖",
+      "predecessors": ["T04"],
+      "timeNormal": 6,
+      "costNormal": 18000,
+      "timeCrash": 4,
+      "costCrash": 24000,
+      "compressible": true
+    },
+    {
+      "id": "T14",
+      "name": "尾水管安装与浇筑",
+      "predecessors": ["T13"],
+      "timeNormal": 8,
+      "costNormal": 32000,
+      "timeCrash": 6,
+      "costCrash": 40000,
+      "compressible": true
+    },
+    {
+      "id": "T15",
+      "name": "厂房下部结构施工",
+      "predecessors": ["T14"],
+      "timeNormal": 10,
+      "costNormal": 50000,
+      "timeCrash": 7,
+      "costCrash": 65000,
+      "compressible": true
+    },
+    {
+      "id": "T16",
+      "name": "蜗壳安装与挂板",
+      "predecessors": ["T15"],
+      "timeNormal": 7,
+      "costNormal": 35000,
+      "timeCrash": 5,
+      "costCrash": 45000,
+      "compressible": true
+    },
+    {
+      "id": "T17",
+      "name": "厂房上部框架封顶",
+      "predecessors": ["T16"],
+      "timeNormal": 9,
+      "costNormal": 45000,
+      "timeCrash": 6,
+      "costCrash": 57000,
+      "compressible": true
+    },
+    {
+      "id": "T18",
+      "name": "厂房桥机安装调试",
+      "predecessors": ["T17"],
+      "timeNormal": 3,
+      "costNormal": 15000,
+      "timeCrash": 2,
+      "costCrash": 19000,
+      "compressible": true
+    },
+    {
+      "id": "T19",
+      "name": "水轮机转轮吊装",
+      "predecessors": ["T16", "T18"],
+      "timeNormal": 5,
+      "costNormal": 50000,
+      "timeCrash": 3,
+      "costCrash": 70000,
+      "compressible": true
+    },
+    {
+      "id": "T20",
+      "name": "发电机定子组装",
+      "predecessors": ["T18"],
+      "timeNormal": 8,
+      "costNormal": 40000,
+      "timeCrash": 5,
+      "costCrash": 58000,
+      "compressible": true
+    },
+    {
+      "id": "T21",
+      "name": "发电机转子吊装",
+      "predecessors": ["T19", "T20"],
+      "timeNormal": 4,
+      "costNormal": 30000,
+      "timeCrash": 2,
+      "costCrash": 46000,
+      "compressible": true
+    },
+    {
+      "id": "T22",
+      "name": "主变压器就位安装",
+      "predecessors": ["T17"],
+      "timeNormal": 6,
+      "costNormal": 24000,
+      "timeCrash": 4,
+      "costCrash": 30000,
+      "compressible": true
+    },
+    {
+      "id": "T23",
+      "name": "全厂监控系统布线",
+      "predecessors": ["T17"],
+      "timeNormal": 7,
+      "costNormal": 14000,
+      "timeCrash": 4,
+      "costCrash": 20000,
+      "compressible": true
+    },
+    {
+      "id": "T24",
+      "name": "压力钢管与闸门安装",
+      "predecessors": ["T11"],
+      "timeNormal": 8,
+      "costNormal": 32000,
+      "timeCrash": 5,
+      "costCrash": 44000,
+      "compressible": true
+    },
+    {
+      "id": "T25",
+      "name": "导流洞封堵闸门下落",
+      "predecessors": ["T11", "T24"],
+      "timeNormal": 2,
+      "costNormal": 10000,
+      "timeCrash": 1,
+      "costCrash": 15000,
+      "compressible": true
+    },
+    {
+      "id": "T26",
+      "name": "水库蓄水与监测",
+      "predecessors": ["T25"],
+      "timeNormal": 10,
+      "costNormal": 5000,
+      "timeCrash": 10,
+      "costCrash": 5000,
+      "compressible": false
+    },
+    {
+      "id": "T27",
+      "name": "充水试验",
+      "predecessors": ["T21", "T26"],
+      "timeNormal": 3,
+      "costNormal": 6000,
+      "timeCrash": 2,
+      "costCrash": 9000,
+      "compressible": true
+    },
+    {
+      "id": "T28",
+      "name": "机组空载与负载试验",
+      "predecessors": ["T27", "T23"],
+      "timeNormal": 5,
+      "costNormal": 20000,
+      "timeCrash": 3,
+      "costCrash": 32000,
+      "compressible": true
+    },
+    {
+      "id": "T29",
+      "name": "升压站倒送电冲击",
+      "predecessors": ["T22"],
+      "timeNormal": 2,
+      "costNormal": 4000,
+      "timeCrash": 1,
+      "costCrash": 8000,
+      "compressible": true
+    },
+    {
+      "id": "T30",
+      "name": "72小时试运行移交",
+      "predecessors": ["T28", "T29"],
+      "timeNormal": 3,
+      "costNormal": 3000,
+      "timeCrash": 3,
+      "costCrash": 3000,
+      "compressible": false
+    }
+  ]
+}

@@ -67,8 +67,11 @@ app.post('/api/auth/login', async (req, res) => {
           'SELECT is_passed FROM Phase1Results WHERE user_id = $1',
           [user.id]
         );
+        console.log('🔍 Phase1 query result for user_id', user.id, ':', phase1Result.rows);
         const phase1Passed = phase1Result.rows[0]?.is_passed || false;
+        console.log('✓ Phase1 passed:', phase1Passed);
         const currentPhase = phase1Passed ? 2 : 1;
+        console.log('🎯 Current phase set to:', currentPhase);
 
         // 3. 生成JWT (包含currentPhase)
         const token = jwt.sign(
@@ -81,12 +84,15 @@ app.post('/api/auth/login', async (req, res) => {
           JWT_SECRET,
           { expiresIn: '8h' }
         );
+        console.log('🔑 Generated token (first 50 chars):', token.substring(0, 50));
+        console.log('🔑 Token parts count:', token.split('.').length);
 
         res.json({
           message: 'Login successful!',
           token,
           currentPhase  // 返回给前端
         });
+        console.log('📤 Login response sent - currentPhase:', currentPhase);
 
     } catch (err) {
         console.error('Login error:', err);
@@ -94,19 +100,33 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-// 2. 获取排行榜 API (无变化)
+// 2. 获取排行榜 API
 app.get('/api/leaderboard', async (req, res) => {
     const { track } = req.query;
-    if (!['cost', 'time', 'weighted'].includes(track)) {
-        return res.status(400).json({ error: 'Invalid track specified.' });
+    // 只允许综合赛道
+    if (track !== 'weighted') {
+        return res.status(400).json({ error: 'Invalid track specified. Only weighted track is supported.' });
     }
     try {
+        // 全生命周期总成本法排行榜
+        // 基准值（可根据项目调整）
+        const DAILY_INDIRECT_COST = 1000;  // 日均间接费用：1000元/天
+
         const query = `
-            SELECT u.name, s.score, s.project_duration, s.total_cost, s.submitted_at
-            FROM Submissions s JOIN Users u ON s.user_id = u.id
-            WHERE s.track = $1 ORDER BY s.score ASC LIMIT 20;
+            SELECT
+                u.name,
+                s.project_duration,
+                s.total_cost,
+                -- 全生命周期总成本 = 直接成本(total_cost) + (工期 × 日均间接费用)
+                (s.total_cost + (s.project_duration * $1))::NUMERIC AS lifecycle_cost,
+                s.submitted_at
+            FROM Submissions s
+            JOIN Users u ON s.user_id = u.id
+            WHERE s.track = 'weighted'
+            ORDER BY lifecycle_cost ASC
+            LIMIT 20;
         `;
-        const result = await pool.query(query, [track]);
+        const result = await pool.query(query, [DAILY_INDIRECT_COST]);
         res.json(result.rows);
     } catch (err) {
         console.error('Leaderboard fetch error:', err);

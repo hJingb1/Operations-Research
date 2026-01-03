@@ -1,160 +1,224 @@
 {
-  "projectName": "办公楼建设项目",
+  "projectName": "【排程挑战】龙吟峡大坝 ",
   "description": "阶段1: 手动排程训练 - 学习前置依赖关系与资源管理",
   "resourcePool": {
-    "worker": 80,
-    "crane": 3,
-    "excavator": 4,
-    "concrete_mixer": 2
+    "worker": 5
   },
   "tasks": [
     {
-      "id": "A",
-      "name": "场地勘测",
-      "duration": 3,
+      "id": "T01",
+      "name": "进场道路与风水电布置",
+      "duration": 5,
       "predecessors": [],
       "resources": {
-        "worker": 5
+        "worker": 2
       }
     },
     {
-      "id": "B",
-      "name": "地基开挖",
-      "duration": 8,
-      "predecessors": ["A"],
+      "id": "T02",
+      "name": "大坝基坑精细开挖",
+      "duration": 10,
+      "predecessors": ["T01"],
       "resources": {
-        "worker": 25,
-        "excavator": 3
+        "worker": 3
       }
     },
     {
-      "id": "C",
-      "name": "地下管道铺设",
+      "id": "T03",
+      "name": "基础固结灌浆",
       "duration": 6,
-      "predecessors": ["A"],
+      "predecessors": ["T02"],
       "resources": {
-        "worker": 15,
-        "excavator": 1
+        "worker": 1
       }
     },
     {
-      "id": "D",
-      "name": "基础浇筑",
-      "duration": 10,
-      "predecessors": ["B"],
+      "id": "T04",
+      "name": "厂房地基开挖",
+      "duration": 8,
+      "predecessors": ["T01"],
       "resources": {
-        "worker": 30,
-        "concrete_mixer": 2,
-        "crane": 1
+        "worker": 2
       }
     },
     {
-      "id": "E",
-      "name": "地下室施工",
+      "id": "T05",
+      "name": "导流洞与围堰",
       "duration": 12,
-      "predecessors": ["D"],
+      "predecessors": ["T01"],
       "resources": {
-        "worker": 35,
-        "crane": 2
+        "worker": 2
       }
     },
     {
-      "id": "F",
-      "name": "主体框架1-3层",
-      "duration": 15,
-      "predecessors": ["E"],
+      "id": "T06_L",
+      "name": "大坝底层浇筑(左岸)",
+      "duration": 12,
+      "predecessors": ["T03"],
       "resources": {
-        "worker": 40,
-        "crane": 2,
-        "concrete_mixer": 1
+        "worker": 2
       }
     },
     {
-      "id": "G",
-      "name": "主体框架4-6层",
-      "duration": 15,
-      "predecessors": ["F"],
+      "id": "T06_R",
+      "name": "大坝底层浇筑(右岸)",
+      "duration": 12,
+      "predecessors": ["T03"],
       "resources": {
-        "worker": 40,
-        "crane": 2,
-        "concrete_mixer": 1
+        "worker": 2
       }
     },
     {
-      "id": "H",
-      "name": "主体框架7-9层",
-      "duration": 15,
-      "predecessors": ["G"],
-      "resources": {
-        "worker": 35,
-        "crane": 2
-      }
-    },
-    {
-      "id": "I",
-      "name": "外墙砌筑",
-      "duration": 10,
-      "predecessors": ["H"],
-      "resources": {
-        "worker": 25,
-        "crane": 1
-      }
-    },
-    {
-      "id": "J",
-      "name": "屋顶防水",
+      "id": "T07",
+      "name": "厂房尾水管安装",
       "duration": 5,
-      "predecessors": ["H"],
+      "predecessors": ["T04"],
       "resources": {
-        "worker": 15,
-        "crane": 1
+        "worker": 1
       }
     },
     {
-      "id": "K",
-      "name": "电梯安装",
+      "id": "T08",
+      "name": "厂房下部结构浇筑",
+      "duration": 10,
+      "predecessors": ["T07"],
+      "resources": {
+        "worker": 2
+      }
+    },
+    {
+      "id": "T09",
+      "name": "压力钢管制作",
+      "duration": 15,
+      "predecessors": ["T05"],
+      "resources": {
+        "worker": 2
+      }
+    },
+    {
+      "id": "T10",
+      "name": "大坝廊道与灌浆平洞",
+      "duration": 6,
+      "predecessors": ["T06_L", "T06_R"],
+      "resources": {
+        "worker": 1
+      }
+    },
+    {
+      "id": "T11",
+      "name": "大坝中层大体积浇筑",
+      "duration": 15,
+      "predecessors": ["T10"],
+      "resources": {
+        "worker": 3
+      }
+    },
+    {
+      "id": "T12",
+      "name": "压力钢管穿坝安装",
       "duration": 8,
-      "predecessors": ["E"],
+      "predecessors": ["T09", "T10"],
       "resources": {
-        "worker": 10,
-        "crane": 1
+        "worker": 2
       }
     },
     {
-      "id": "L",
-      "name": "内部装修",
-      "duration": 20,
-      "predecessors": ["I", "J"],
-      "resources": {
-        "worker": 50
-      }
-    },
-    {
-      "id": "M",
-      "name": "水电安装",
-      "duration": 12,
-      "predecessors": ["C", "I"],
-      "resources": {
-        "worker": 20
-      }
-    },
-    {
-      "id": "N",
-      "name": "外立面装饰",
+      "id": "T13",
+      "name": "水轮机蜗壳安装",
       "duration": 8,
-      "predecessors": ["I"],
+      "predecessors": ["T08"],
       "resources": {
-        "worker": 20,
-        "crane": 1
+        "worker": 1
       }
     },
     {
-      "id": "O",
-      "name": "竣工验收",
-      "duration": 3,
-      "predecessors": ["L", "M", "N", "K"],
+      "id": "T14",
+      "name": "厂房上部框架封顶",
+      "duration": 10,
+      "predecessors": ["T13"],
       "resources": {
-        "worker": 10
+        "worker": 2
+      }
+    },
+    {
+      "id": "T15",
+      "name": "溢流面与闸墩施工",
+      "duration": 10,
+      "predecessors": ["T11"],
+      "resources": {
+        "worker": 2
+      }
+    },
+    {
+      "id": "T16",
+      "name": "大坝顶层浇筑与封顶",
+      "duration": 8,
+      "predecessors": ["T15"],
+      "resources": {
+        "worker": 2
+      }
+    },
+    {
+      "id": "T17",
+      "name": "进水口拦污栅安装",
+      "duration": 5,
+      "predecessors": ["T16"],
+      "resources": {
+        "worker": 1
+      }
+    },
+    {
+      "id": "T18",
+      "name": "机组转子吊装",
+      "duration": 5,
+      "predecessors": ["T14"],
+      "resources": {
+        "worker": 2
+      }
+    },
+    {
+      "id": "T19",
+      "name": "发电机总装",
+      "duration": 8,
+      "predecessors": ["T18"],
+      "resources": {
+        "worker": 1
+      }
+    },
+    {
+      "id": "T20",
+      "name": "下闸蓄水",
+      "duration": 2,
+      "predecessors": ["T16", "T12"],
+      "resources": {
+        "worker": 1
+      }
+    },
+    {
+      "id": "T21",
+      "name": "水库充水",
+      "duration": 10,
+      "predecessors": ["T20"],
+      "resources": {
+        "worker": 1
+      }
+    },
+    {
+      "id": "T22",
+      "name": "有水联调",
+      "duration": 5,
+      "predecessors": ["T19", "T21", "T17"],
+      "resources": {
+        "worker": 2
+      }
+    },
+    {
+      "id": "T23",
+      "name": "并网发电移交",
+      "duration": 2,
+      "predecessors": ["T22"],
+      "resources": {
+        "worker": 1
       }
     }
   ]

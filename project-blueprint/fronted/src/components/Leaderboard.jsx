@@ -1,9 +1,9 @@
 // frontend/src/components/Leaderboard.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Leaderboard.css';
 
 function Leaderboard() {
-  const [track, setTrack] = useState('cost'); // 'cost' or 'time'
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -11,47 +11,86 @@ function Leaderboard() {
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/leaderboard?track=${track}`);
+        const response = await axios.get(`/api/leaderboard?track=weighted`);
         setData(response.data);
       } catch (error) {
         console.error("获取排行榜数据失败:", error);
-        setData([]); // 出错时清空数据
+        setData([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchLeaderboard();
-  }, [track]); // 每当 track 变化时，重新获取数据
+  }, []);
+
+  const getRankClass = (index) => {
+    if (index === 0) return 'rank-1';
+    if (index === 1) return 'rank-2';
+    if (index === 2) return 'rank-3';
+    return '';
+  };
+
+  const getRankBadge = (index) => {
+    if (index === 0) return <span className="rank-badge gold">🥇</span>;
+    if (index === 1) return <span className="rank-badge silver">🥈</span>;
+    if (index === 2) return <span className="rank-badge bronze">🥉</span>;
+    return <span className="rank-number">{index + 1}</span>;
+  };
 
   return (
-    <div>
-      <h2>排行榜</h2>
-      <div>
-        <button onClick={() => setTrack('cost')} disabled={track === 'cost'}>成本榜</button>
-        <button onClick={() => setTrack('time')} disabled={track === 'time'} style={{ marginLeft: '10px' }}>工期榜</button>
+    <div className="leaderboard-container">
+      <div className="leaderboard-header">
+        <h2 className="leaderboard-title">排行榜 - 全生命周期总成本</h2>
       </div>
-      {loading ? <p>正在加载排行榜...</p> : (
-        <table className="task-table">
-          <thead>
-            <tr>
-              <th>排名</th>
-              <th>姓名</th>
-              <th>分数 ({track === 'cost' ? '成本' : '工期'})</th>
-              <th>提交时间</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{row.name}</td>
-                <td>{track === 'cost' ? `¥${Math.round(row.score).toLocaleString()}` : `${row.score} 天`}</td>
-                <td>{new Date(row.submitted_at).toLocaleString()}</td>
+
+      {loading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">正在加载排行榜...</p>
+        </div>
+      ) : (
+        <div className="table-wrapper">
+          <table className="leaderboard-table">
+            <thead>
+              <tr>
+                <th className='col-rank'>排名</th>
+                <th className='col-name'>姓名</th>
+                <th className="col-data" style={{textAlign: 'center'}}>全生命周期总成本</th>
+                <th className="col-data" style={{textAlign: 'center'}}>工期(天)</th>
+                <th className="col-data" style={{textAlign: 'center'}}>直接成本(元)</th>
+                <th className='col-time'>提交时间</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="empty-state">
+                    <div className="empty-icon">📊</div>
+                    <p>暂无提交数据</p>
+                  </td>
+                </tr>
+              ) : (
+                data.map((row, index) => (
+                  <tr key={index} className={getRankClass(index)}>
+                    <td className="rank-cell">
+                      {getRankBadge(index)}
+                    </td>
+                    <td className="name-cell">{row.name}</td>
+                    <td className="score-cell">
+                      <span className="lifecycle-cost">
+                        ¥{Math.round(parseFloat(row.lifecycle_cost)).toLocaleString()}
+                      </span>
+                    </td>
+                    <td style={{textAlign: 'center'}}>{row.project_duration} 天</td>
+                    <td style={{textAlign: 'center'}}>¥{Math.round(row.total_cost).toLocaleString()}</td>
+                    <td className="time-cell">{new Date(row.submitted_at).toLocaleString('zh-CN')}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

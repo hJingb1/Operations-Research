@@ -1,0 +1,383 @@
+/* ========================================
+   排行榜样式
+   ======================================== */
+
+.leaderboard-container {
+  background: var(--white);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--spacing-8);
+  margin-bottom: var(--spacing-6);
+}
+
+/* 头部区域 */
+.leaderboard-header {
+  margin-bottom: var(--spacing-6);
+}
+
+.leaderboard-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 var(--spacing-6) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.leaderboard-title::before {
+  content: '🏆';
+  font-size: var(--text-4xl);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+/* 标签页按钮组 */
+.track-tabs {
+  display: flex;
+  gap: var(--spacing-3);
+  background: var(--gray-100);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-xl);
+  width: fit-content;
+}
+
+.track-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  background: transparent;
+  color: var(--gray-600);
+}
+
+.track-tab:hover:not(.active) {
+  background: var(--gray-200);
+  color: var(--gray-800);
+}
+
+.track-tab.active {
+  background: var(--white);
+  color: var(--primary-700);
+  box-shadow: var(--shadow-md);
+}
+
+.tab-icon {
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+
+/* 表格包装器 */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-6);
+}
+
+/* 排行榜表格 */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 var(--spacing-2);
+  font-size: var(--text-sm);
+  table-layout: fixed;
+}
+
+.leaderboard-table thead th {
+  background: var(--gray-50);
+  padding: var(--spacing-5);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gray-600);
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* 固定列宽 - 前两列和最后一列固定，其他列均分 */
+/*.leaderboard-table thead th:nth-child(1) { width: 200px; }   /* 排名 */
+/*.leaderboard-table thead th:nth-child(2) { width: 200px; }  /* 姓名 */
+/*.leaderboard-table thead th:last-child { width: 300px; }    /*提交时间*/
+
+
+/* 1. 排名列：不需要太宽 */
+.leaderboard-table .col-rank { 
+  width: 80px; 
+  text-align: center; /* 强制居中 */
+}
+
+/* 2. 姓名列：给够空间 */
+.leaderboard-table .col-name { 
+  width: 150px; 
+  text-align: center;
+}
+
+/* 3. 数据列 (综合分数、工期等)：固定宽度，防止过宽导致视觉分离 */
+.leaderboard-table .col-data { 
+  width: 110px; /* 根据屏幕大小调整，推荐 100-120px */
+}
+
+/* 4. 单一赛道的主分数列 (稍微宽一点) */
+.leaderboard-table .col-score {
+  width: 180px;
+}
+
+/* 5. 时间列 */
+.leaderboard-table .col-time { 
+  width: 180px; 
+  text-align: center;
+}
+
+/* === 关键修复：确保表头和内容的对齐方式一致 === */
+
+/* 强制表头样式覆盖 */
+.leaderboard-table thead th {
+  /* 你的原 CSS 有 padding: var(--spacing-5)，可能导致宽度计算偏差 */
+  /* 建议稍微减小 padding 以获得更紧凑的视图 */
+  padding: 12px 8px; 
+}
+
+/* 强制内容单元格样式 */
+.leaderboard-table tbody td {
+  /* 确保文字不会换行，保持整洁 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 12px 8px;
+}
+
+.leaderboard-table thead th:first-child {
+  border-top-left-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.leaderboard-table thead th:last-child {
+  border-top-right-radius: var(--radius-lg);
+}
+
+.leaderboard-table tbody tr {
+  background: var(--white);
+  transition: all var(--duration-fast) var(--ease-out);
+  border-radius: var(--radius-lg);
+}
+
+.leaderboard-table tbody tr:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(5px);
+}
+
+.leaderboard-table tbody td {
+  padding: var(--spacing-5);
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+  color: var(--gray-700);
+}
+
+.leaderboard-table tbody td:first-child {
+  border-left: 1px solid var(--gray-200);
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+}
+
+.leaderboard-table tbody td:last-child {
+  border-right: 1px solid var(--gray-200);
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+/* 前三名特殊样式 */
+.leaderboard-table tbody tr.rank-1 {
+  background: linear-gradient(90deg,
+    rgba(255, 215, 0, 0.15) 0%,
+    rgba(255, 215, 0, 0.05) 100%
+  );
+  border-left: 4px solid #FFD700;
+}
+
+.leaderboard-table tbody tr.rank-2 {
+  background: linear-gradient(90deg,
+    rgba(192, 192, 192, 0.15) 0%,
+    rgba(192, 192, 192, 0.05) 100%
+  );
+  border-left: 4px solid #C0C0C0;
+}
+
+.leaderboard-table tbody tr.rank-3 {
+  background: linear-gradient(90deg,
+    rgba(205, 127, 50, 0.15) 0%,
+    rgba(205, 127, 50, 0.05) 100%
+  );
+  border-left: 4px solid #CD7F32;
+}
+
+/* 排名徽章 */
+.rank-cell {
+  text-align: center;
+  font-weight: var(--font-bold);
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-2xl);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.rank-badge.gold {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.rank-badge.silver {
+  background: linear-gradient(135deg, #C0C0C0, #808080);
+}
+
+.rank-badge.bronze {
+  background: linear-gradient(135deg, #CD7F32, #8B4513);
+}
+
+.rank-number {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--gray-600);
+}
+
+/* 姓名单元格 */
+.name-cell {
+  font-weight: var(--font-semibold);
+  color: var(--gray-800);
+}
+
+/* 全生命周期总成本样式 */
+.lifecycle-cost {
+  font-size: var(--text-xl);
+  font-weight: var(--font-black);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 分数单元格 */
+.score-cell {
+  text-align: center;
+}
+
+.score-perfect {
+  font-size: var(--text-xl);
+  font-weight: var(--font-black);
+  color: var(--success);
+  background: linear-gradient(135deg, var(--success), var(--success-dark));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.score-normal {
+  font-size: var(--text-xl);
+  font-weight: var(--font-black);
+  color: var(--warning);
+}
+
+.main-score {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 超出百分比 */
+.excess-positive {
+  color: var(--error);
+  font-weight: var(--font-semibold);
+}
+
+.excess-zero {
+  color: var(--success);
+  font-weight: var(--font-semibold);
+}
+
+/* 时间单元格 */
+.time-cell {
+  font-size: var(--text-xs);
+  color: var(--gray-500);
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center !important;
+  padding: var(--spacing-20) !important;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: var(--spacing-4);
+  opacity: 0.3;
+}
+
+.empty-state p {
+  font-size: var(--text-lg);
+  color: var(--gray-500);
+  font-weight: var(--font-medium);
+}
+
+/* 评分说明框 */
+.scoring-info-box {
+  background: linear-gradient(135deg,
+    var(--warning-light) 0%,
+    rgba(255, 152, 0, 0.1) 100%
+  );
+  border: 2px solid var(--warning);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+}
+
+.scoring-title {
+  display: block;
+  font-size: var(--text-base);
+  color: var(--warning-dark);
+  margin-bottom: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.scoring-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.scoring-list li {
+  padding: var(--spacing-2) 0;
+  font-size: var(--text-sm);
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.scoring-list li::before {
+  content: '•';
+  color: var(--warning);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+}

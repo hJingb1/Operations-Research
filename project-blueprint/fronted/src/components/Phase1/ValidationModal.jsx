@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { validatePhase1Submission } from '../../validators/phase1Validator';
-import { markPassed } from '../../store/phase1Slice';
-import { setPhase1Result } from '../../store/gameSlice';
+import { logout } from '../../store/authSlice';
 import axios from 'axios';
 
 function ValidationModal({ isOpen, onClose }) {
@@ -28,6 +27,15 @@ function ValidationModal({ isOpen, onClose }) {
     // 通过验证，提交到后端
     setIsSubmitting(true);
     try {
+      console.log('提交阶段1，Token:', token);
+      console.log('请求数据:', {
+        finalDuration: currentValidation.errors.duration.current,
+        taskPlacements: tasks.filter(t => t.isPlaced).map(t => ({
+          taskId: t.id,
+          startDay: t.startDay
+        }))
+      });
+
       const response = await axios.post(
         '/api/phase1/submit',
         {
@@ -42,17 +50,33 @@ function ValidationModal({ isOpen, onClose }) {
         }
       );
 
-      // 更新状态并切换到阶段2
-      dispatch(markPassed());
-      dispatch(setPhase1Result({ score: response.data.score }));
+      console.log('提交成功:', response.data);
 
-      alert(config.validationMessages.pass);
+      // 显示成功提示
+      alert(config.validationMessages.pass + '\n\n请重新登录以进入阶段2！');
+
+      // 提交成功后的处理流程：
+      // 1. 后端数据库已更新：Phase1Results.is_passed = TRUE
+      // 2. 但localStorage中的旧token仍包含 currentPhase: 1
+      // 3. 需要清除旧token，强制用户重新登录
+      // 4. 重新登录时，后端会检测到is_passed=TRUE，返回新token（currentPhase: 2）
+
+      // 清除旧token并返回登录页面
+      dispatch(logout());
+
+      // 关闭弹窗（此时会自动返回登录页面，因为isAuthenticated变为false）
       onClose();
-      // 页面将自动切换到阶段2(通过App.jsx的逻辑)
 
     } catch (error) {
       console.error('提交失败:', error);
-      alert('提交失败，请稍后重试: ' + (error.response?.data?.error || error.message));
+      console.error('错误响应:', error.response);
+
+      // 检查是否是token问题
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        alert('登录已过期，请重新登录');
+      } else {
+        alert('提交失败，请稍后重试: ' + (error.response?.data?.error || error.message));
+      }
     } finally {
       setIsSubmitting(false);
     }
